@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  nome         String
+  email        String        @unique
+  senha        String
+  tipo         String        @default("LEITOR") // LEITOR, BIBLIOTECARIO
+  bairro       String
+  grupoSocial  String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  loans        Loan[]
+  reservations Reservation[]
+  fines        Fine[]
+}
+
+model Author {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  biografia String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  books     Book[]
+}
+
+model Genre {
+  id        Int      @id @default(autoincrement())
+  nome      String   @unique
+  descricao String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  books     Book[]
+}
+
+model Book {
+  id             Int           @id @default(autoincrement())
+  titulo         String
+  isbn           String?       @unique
+  anoPublicacao  Int?
+  isDecolonized  Boolean       @default(false)
+  tags           String?
+  authorId       Int
+  genreId        Int
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  author         Author        @relation(fields: [authorId], references: [id])
+  genre          Genre         @relation(fields: [genreId], references: [id])
+  exemplares     Exemplar[]
+  reservations   Reservation[]
+}
+
+model Exemplar {
+  id        Int            @id @default(autoincrement())
+  codigo    String         @unique
+  status    String         @default("DISPONIVEL") // DISPONIVEL, EMPRESTADO, RESERVADO, MANUTENCAO
+  bookId    Int
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  book      Book           @relation(fields: [bookId], references: [id])
+  loans     Loan[]
+}
+
+model Loan {
+  id                    Int        @id @default(autoincrement())
+  userId                Int
+  exemplarId            Int
+  status                String     @default("ATIVO") // ATIVO, DEVOLVIDO, ATRASADO
+  dataEmprestimo        DateTime   @default(now())
+  dataPrevisaoDevolucao DateTime
+  dataDevolucaoEfetiva  DateTime?
+  createdAt             DateTime   @default(now())
+  updatedAt             DateTime   @updatedAt
+  user                  User       @relation(fields: [userId], references: [id])
+  exemplar              Exemplar   @relation(fields: [exemplarId], references: [id])
+  fines                 Fine[]
+}
+
+model Reservation {
+  id           Int               @id @default(autoincrement())
+  userId       Int
+  bookId       Int
+  status       String            @default("PENDENTE") // PENDENTE, ATENDIDA, CANCELADA
+  posicaoFila  Int               @default(1)
+  dataReserva  DateTime          @default(now())
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+  user         User              @relation(fields: [userId], references: [id])
+  book         Book              @relation(fields: [bookId], references: [id])
+}
+
+model Fine {
+  id        Int        @id @default(autoincrement())
+  userId    Int
+  loanId    Int
+  valor     Float
+  status    String     @default("PENDENTE") // PENDENTE, PAGA
+  diasAtraso Int
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  user      User       @relation(fields: [userId], references: [id])
+  loan      Loan       @relation(fields: [loanId], references: [id])
+}
