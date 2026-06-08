@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect } from 'react'
+import { authAPI } from '../api/client'
 
 const AuthContext = createContext(null)
 
@@ -7,37 +8,43 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('sgb_mock_user')
-    if (storedUser) {
-      setUser(JSON.parse(storedUser))
+    const token = localStorage.getItem('sgb_token')
+    if (token) {
+      authAPI.me()
+        .then(res => {
+          setUser(res.data)
+        })
+        .catch(() => {
+          localStorage.removeItem('sgb_token')
+          setUser(null)
+        })
+        .finally(() => setLoading(false))
+    } else {
+      setLoading(false)
     }
-    setLoading(false)
   }, [])
 
-  const login = (email, senha) => {
-    // Mock login logic
-    let mockUser = null;
-    if (email === 'admin@sgb.com') {
-      mockUser = { nome: 'Administrador', email, tipo: 'BIBLIOTECARIO', avatar: 'A' }
-    } else {
-      mockUser = { nome: 'Leitor Padrão', email, tipo: 'LEITOR', avatar: 'L' }
-    }
-    
-    localStorage.setItem('sgb_mock_user', JSON.stringify(mockUser))
-    setUser(mockUser)
-    return Promise.resolve()
+  const login = async (email, senha) => {
+    const res = await authAPI.login({ email, senha })
+    localStorage.setItem('sgb_token', res.data.token)
+    setUser(res.data.user)
   }
 
-  const register = (data) => {
-    // Mock register logic
-    const mockUser = { nome: data.nome, email: data.email, tipo: 'LEITOR', avatar: data.nome[0] }
-    localStorage.setItem('sgb_mock_user', JSON.stringify(mockUser))
-    setUser(mockUser)
-    return Promise.resolve()
+  const register = async (data) => {
+    const payload = {
+      nome: data.nome,
+      email: data.email,
+      senha: data.senha,
+      bairro: data.bairro || 'Não informado',
+      grupoSocial: data.grupoSocial || null
+    }
+    const res = await authAPI.register(payload)
+    localStorage.setItem('sgb_token', res.data.token)
+    setUser(res.data.user)
   }
 
   const logout = () => {
-    localStorage.removeItem('sgb_mock_user')
+    localStorage.removeItem('sgb_token')
     setUser(null)
   }
 
