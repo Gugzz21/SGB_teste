@@ -23,29 +23,29 @@ export default function Dashboard() {
     <div className="space-y-6">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="glass-card p-6 border-l-4 border-slate-700">
-          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Total de Livros</p>
-          <p className="text-3xl font-bold text-slate-800 mt-2">1.234</p>
+        <div className="glass-card p-6 border-l-4 border-slate-700 dark:border-slate-500">
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total de Livros</p>
+          <p className="text-3xl font-bold text-slate-800 dark:text-slate-100 mt-2">1.234</p>
         </div>
         
-        <div className="glass-card p-6 border-l-4 border-sgb-vinho">
-          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Livros Emprestados</p>
-          <p className="text-3xl font-bold text-sgb-vinho mt-2">156</p>
+        <div className="glass-card p-6 border-l-4 border-sgb-vinho dark:border-rose-500">
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Livros Emprestados</p>
+          <p className="text-3xl font-bold text-sgb-vinho dark:text-rose-400 mt-2">156</p>
         </div>
 
-        <div className="glass-card p-6 border-l-4 border-emerald-600">
-          <p className="text-sm font-medium text-slate-500 uppercase tracking-wider">Usuários Ativos</p>
-          <p className="text-3xl font-bold text-emerald-600 mt-2">432</p>
+        <div className="glass-card p-6 border-l-4 border-emerald-600 dark:border-emerald-400">
+          <p className="text-sm font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wider">Usuários Ativos</p>
+          <p className="text-3xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">432</p>
         </div>
 
-        <div className="glass-card p-6 border-l-4 border-rose-500 bg-rose-50/50">
+        <div className="glass-card p-6 border-l-4 border-rose-500 bg-rose-50/50 dark:bg-rose-900/20">
           <div className="flex justify-between items-start">
             <div>
-              <p className="text-sm font-medium text-rose-800 uppercase tracking-wider">Multas Pendentes</p>
-              <p className="text-3xl font-bold text-rose-600 mt-2">R$ 245,00</p>
+              <p className="text-sm font-medium text-rose-800 dark:text-rose-400 uppercase tracking-wider">Multas Pendentes</p>
+              <p className="text-3xl font-bold text-rose-600 dark:text-rose-300 mt-2">R$ 245,00</p>
             </div>
-            <div className="p-2 bg-rose-100 rounded-lg">
-              <svg className="w-6 h-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <div className="p-2 bg-rose-100 dark:bg-rose-900/50 rounded-lg">
+              <svg className="w-6 h-6 text-rose-600 dark:text-rose-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
               </svg>
             </div>
@@ -56,7 +56,7 @@ export default function Dashboard() {
       {/* Gráficos */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="glass-card p-6">
-          <h3 className="text-lg font-bold text-slate-800 mb-6">Empréstimos vs Devoluções</h3>
+          <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100 mb-6">Empréstimos vs Devoluções</h3>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={emprestimosData}>
@@ -74,8 +74,8 @@ export default function Dashboard() {
 
         <div className="glass-card p-6">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="text-lg font-bold text-slate-800">Mapeamento Demográfico</h3>
-            <span className="px-3 py-1 bg-slate-100 text-slate-600 text-xs rounded-full font-medium">Dados Anonimizados</span>
+            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-100">Mapeamento Demográfico</h3>
+            <span className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs rounded-full font-medium">Dados Anonimizados</span>
           </div>
           <div className="h-80">
             <ResponsiveContainer width="100%" height="100%">

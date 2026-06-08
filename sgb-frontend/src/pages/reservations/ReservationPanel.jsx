@@ -12,9 +12,9 @@ export default function ReservationPanel() {
   
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center border-b border-slate-200 pb-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-800">Fila de Espera Transparente</h1>
+          <h1 className="text-2xl font-bold text-slate-800 dark:text-slate-100">Fila de Espera & Reservas</h1>
           <p className="text-sm text-slate-500 mt-1">Garantindo equidade e justiça no acesso ao conhecimento.</p>
         </div>
         <button className="btn-primary">Nova Reserva</button>
@@ -22,7 +22,7 @@ export default function ReservationPanel() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {mockReservations
-          .filter(res => isBibliotecario || res.user === 'Maria da Silva') // Simula o Leitor vendo só as dele
+          .filter(res => isBibliotecario || res.user === 'Maria da Silva')
           .map(res => (
           <div key={res.id} className="glass-card relative overflow-hidden">
             <div className="absolute top-0 right-0 p-4">
@@ -35,9 +35,22 @@ export default function ReservationPanel() {
               <span className="inline-block px-2.5 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full mb-4">
                 {res.status}
               </span>
-              <h3 className="font-bold text-slate-800 text-lg pr-12 leading-tight mb-2">{res.livro}</h3>
-              <p className="text-sm text-slate-600 mb-1"><span className="font-semibold">Leitor:</span> {res.user}</p>
-              <p className="text-sm text-slate-500"><span className="font-semibold">Solicitado em:</span> {res.data}</p>
+              <table className="w-full text-left text-sm text-slate-600">
+                <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 uppercase">
+                  <tr>
+                    <th className="px-6 py-4 font-semibold">Posição</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
+                  <tr className="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+                    <td className="px-6 py-4">
+                      <h3 className="font-bold text-slate-800 text-lg pr-12 leading-tight mb-2">{res.livro}</h3>
+                      <p className="text-sm text-slate-600 mb-1"><span className="font-semibold">Leitor:</span> {res.user}</p>
+                      <p className="text-sm text-slate-500"><span className="font-semibold">Solicitado em:</span> {res.data}</p>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
             <div className="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-between">

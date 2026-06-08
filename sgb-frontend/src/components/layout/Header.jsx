@@ -19,10 +19,11 @@ export default function Header() {
   }
 
   return (
-    <header className="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-8 sticky top-0 z-10">
-      <div className="flex items-center gap-4">
-        <h2 className="text-xl font-bold text-slate-800">{getPageTitle()}</h2>
-      </div>
+    <header className="sticky top-0 z-40 bg-white/70 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 transition-colors duration-300">
+      <div className="flex items-center justify-between px-8 py-4">
+        <div>
+          <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">{getPageTitle()}</h2>
+        </div>
 
       <div className="flex items-center gap-4">
         <button 
@@ -43,6 +44,7 @@ export default function Header() {
           </svg>
           <span className="absolute top-1.5 right-2 w-2 h-2 bg-sgb-rosa rounded-full border border-white"></span>
         </button>
+      </div>
       </div>
     </header>
   )

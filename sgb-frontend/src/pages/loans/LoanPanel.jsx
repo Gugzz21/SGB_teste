@@ -15,7 +15,7 @@ export default function LoanPanel() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-4">
+      <h1 className="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-4 dark:text-slate-100">
         {isBibliotecario ? 'Gestão de Empréstimos e Devoluções' : 'Meus Empréstimos'}
       </h1>
 
@@ -64,7 +64,7 @@ export default function LoanPanel() {
       {(!isBibliotecario || activeTab === 'ativos') && (
         <div className="glass-card overflow-hidden">
           <table className="w-full text-left text-sm text-slate-600">
-            <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase">
+            <thead className="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 uppercase">
               <tr>
                 <th className="px-6 py-4">Livro</th>
                 {isBibliotecario && <th className="px-6 py-4">Leitor</th>}
@@ -73,14 +73,14 @@ export default function LoanPanel() {
                 {isBibliotecario && <th className="px-6 py-4">Ações</th>}
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100">
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
               {mockLoans
-                .filter(loan => isBibliotecario || loan.user.nome === 'Carlos Mendes') // Simula o leitor vendo apenas o dele
+                .filter(loan => isBibliotecario || loan.user.nome === 'Carlos Mendes')
                 .map(loan => (
-                <tr key={loan.id} className="hover:bg-slate-50">
-                  <td className="px-6 py-4 font-bold text-slate-800">{loan.livro}</td>
-                  {isBibliotecario && <td className="px-6 py-4">{loan.user.nome}</td>}
-                  <td className="px-6 py-4">{loan.prazo}</td>
+                <tr key={loan.id} className="hover:bg-slate-50 dark:hover:bg-slate-800/50">
+                  <td className="px-6 py-4 font-bold text-slate-800 dark:text-slate-100">{loan.livro}</td>
+                  {isBibliotecario && <td className="px-6 py-4 dark:text-slate-300">{loan.user.nome}</td>}
+                  <td className="px-6 py-4 dark:text-slate-300">{loan.prazo}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${loan.status === 'ATIVO' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>{loan.status}</span>
                   </td>

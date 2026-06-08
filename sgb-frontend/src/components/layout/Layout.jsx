@@ -4,7 +4,7 @@ import Header from './Header'
 
 export default function Layout() {
   return (
-    <div className="flex min-h-screen bg-slate-50">
+    <div className="flex min-h-screen bg-slate-50 dark:bg-[#0f0f1a] transition-colors duration-300">
       <Sidebar />
       <div className="flex-1 flex flex-col ml-64">
         <Header />

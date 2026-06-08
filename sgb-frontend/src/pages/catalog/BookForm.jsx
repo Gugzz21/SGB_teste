@@ -2,6 +2,18 @@ import { useState, useEffect } from 'react'
 import { booksAPI } from '../../api/client'
 import Spinner from '../../components/ui/Spinner'
 
+const COMMON_TAGS = [
+  'Ação',
+  'Aventura',
+  'Romance',
+  'Ficção Científica',
+  'Fantasia',
+  'Suspense',
+  'Terror',
+  'Biografia',
+  'Literatura Clássica',
+]
+
 const DECOLONIZED_TAGS = [
   'Literatura Indígena',
   'Autores Afro-brasileiros',
@@ -88,7 +100,7 @@ export default function BookForm({ initial, authors, genres, onSuccess, onCancel
       autorId:       Number(form.autorId),
       generoId:      Number(form.generoId),
       isDecolonized: form.isDecolonized,
-      tags:          form.isDecolonized ? form.tags : [],
+      tags:          form.tags,
     }
 
     try {
@@ -183,6 +195,27 @@ export default function BookForm({ initial, authors, genres, onSuccess, onCancel
         </div>
       </div>
 
+      {/* Common Tags */}
+      <div>
+        <label className="form-label">Tags Literárias e Gêneros Secundários</label>
+        <div className="flex flex-wrap gap-2 mt-2">
+          {COMMON_TAGS.map(tag => (
+            <button
+              key={tag}
+              type="button"
+              onClick={() => handleTagToggle(tag)}
+              className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all border ${
+                form.tags.includes(tag)
+                  ? 'text-sgb-vinho border-sgb-vinho bg-sgb-vinho/10 dark:text-rose-400 dark:border-rose-400 dark:bg-rose-400/20'
+                  : 'text-slate-600 border-slate-200 bg-white hover:border-slate-300 dark:text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600'
+              }`}
+            >
+              {form.tags.includes(tag) && '✓ '}{tag}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Decolonized toggle */}
       <div className="p-4 rounded-xl border border-white/[0.06]"
         style={{ background: 'rgba(139,92,246,0.05)' }}>
@@ -208,9 +241,9 @@ export default function BookForm({ initial, authors, genres, onSuccess, onCancel
 
       {/* Tags (shown when isDecolonized) */}
       {form.isDecolonized && (
-        <div className="animate-fadeIn">
+        <div className="animate-fadeIn mt-4">
           <label className="form-label">Tags de Diversidade</label>
-          <p className="text-xs text-slate-500 mb-3">Selecione as categorias que melhor descrevem este livro</p>
+          <p className="text-xs text-slate-500 mb-3">Selecione as categorias éticas que melhor descrevem este livro</p>
           <div className="flex flex-wrap gap-2">
             {DECOLONIZED_TAGS.map(tag => (
               <button
@@ -219,8 +252,8 @@ export default function BookForm({ initial, authors, genres, onSuccess, onCancel
                 onClick={() => handleTagToggle(tag)}
                 className={`px-3 py-1.5 text-xs rounded-lg font-medium transition-all border ${
                   form.tags.includes(tag)
-                    ? 'text-white border-violet-500/60 bg-violet-500/20'
-                    : 'text-slate-400 border-white/10 bg-white/[0.03] hover:border-white/20 hover:text-slate-300'
+                    ? 'text-violet-600 border-violet-600 bg-violet-600/10 dark:text-violet-400 dark:border-violet-400 dark:bg-violet-400/20'
+                    : 'text-slate-600 border-slate-200 bg-white hover:border-slate-300 dark:text-slate-400 dark:border-slate-700 dark:bg-slate-800 dark:hover:border-slate-600'
                 }`}
               >
                 {form.tags.includes(tag) && '✓ '}{tag}
