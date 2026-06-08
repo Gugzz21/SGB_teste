@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const mockLoans = [
   { id: 1, user: { nome: 'Carlos Mendes', temMulta: true }, livro: 'Quarto de Despejo', dataRetirada: '01/06/2026', prazo: '15/06/2026', status: 'ATIVO' },
@@ -6,6 +7,7 @@ const mockLoans = [
 ];
 
 export default function LoanPanel() {
+  const { isBibliotecario, user } = useAuth();
   const [activeTab, setActiveTab] = useState('novo');
   const [selectedUser, setSelectedUser] = useState(null);
 
@@ -13,14 +15,18 @@ export default function LoanPanel() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-4">Gestão de Empréstimos e Devoluções</h1>
+      <h1 className="text-2xl font-bold text-slate-800 border-b border-slate-200 pb-4">
+        {isBibliotecario ? 'Gestão de Empréstimos e Devoluções' : 'Meus Empréstimos'}
+      </h1>
 
-      <div className="flex space-x-2 border-b border-slate-200">
-        <button onClick={() => setActiveTab('novo')} className={`px-4 py-2 font-medium border-b-2 transition-colors ${activeTab === 'novo' ? 'border-sgb-vinho text-sgb-vinho' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>Registrar Nova Retirada</button>
-        <button onClick={() => setActiveTab('ativos')} className={`px-4 py-2 font-medium border-b-2 transition-colors ${activeTab === 'ativos' ? 'border-sgb-vinho text-sgb-vinho' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>Processar Devolução</button>
-      </div>
+      {isBibliotecario && (
+        <div className="flex space-x-2 border-b border-slate-200">
+          <button onClick={() => setActiveTab('novo')} className={`px-4 py-2 font-medium border-b-2 transition-colors ${activeTab === 'novo' ? 'border-sgb-vinho text-sgb-vinho' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>Registrar Nova Retirada</button>
+          <button onClick={() => setActiveTab('ativos')} className={`px-4 py-2 font-medium border-b-2 transition-colors ${activeTab === 'ativos' ? 'border-sgb-vinho text-sgb-vinho' : 'border-transparent text-slate-500 hover:text-slate-700'}`}>Processar Devolução</button>
+        </div>
+      )}
 
-      {activeTab === 'novo' && (
+      {isBibliotecario && activeTab === 'novo' && (
         <div className="glass-card p-6 max-w-2xl">
           <form className="space-y-6">
             <div>
@@ -55,30 +61,34 @@ export default function LoanPanel() {
         </div>
       )}
 
-      {activeTab === 'ativos' && (
+      {(!isBibliotecario || activeTab === 'ativos') && (
         <div className="glass-card overflow-hidden">
           <table className="w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase">
               <tr>
                 <th className="px-6 py-4">Livro</th>
-                <th className="px-6 py-4">Leitor</th>
+                {isBibliotecario && <th className="px-6 py-4">Leitor</th>}
                 <th className="px-6 py-4">Prazo</th>
                 <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Ações</th>
+                {isBibliotecario && <th className="px-6 py-4">Ações</th>}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {mockLoans.map(loan => (
+              {mockLoans
+                .filter(loan => isBibliotecario || loan.user.nome === 'Carlos Mendes') // Simula o leitor vendo apenas o dele
+                .map(loan => (
                 <tr key={loan.id} className="hover:bg-slate-50">
                   <td className="px-6 py-4 font-bold text-slate-800">{loan.livro}</td>
-                  <td className="px-6 py-4">{loan.user.nome}</td>
+                  {isBibliotecario && <td className="px-6 py-4">{loan.user.nome}</td>}
                   <td className="px-6 py-4">{loan.prazo}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2.5 py-1 rounded-full text-xs font-bold ${loan.status === 'ATIVO' ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}`}>{loan.status}</span>
                   </td>
-                  <td className="px-6 py-4">
-                    <button className="text-sgb-vinho hover:text-rose-900 font-bold">Processar</button>
-                  </td>
+                  {isBibliotecario && (
+                    <td className="px-6 py-4">
+                      <button className="text-sgb-vinho hover:text-rose-900 font-bold">Processar</button>
+                    </td>
+                  )}
                 </tr>
               ))}
             </tbody>

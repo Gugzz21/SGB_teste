@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 
 const mockReservations = [
   { id: 101, user: 'Maria da Silva', livro: 'A Queda do Céu', data: '10/06/2026', posicao: 1, status: 'PENDENTE' },
@@ -7,6 +8,8 @@ const mockReservations = [
 ];
 
 export default function ReservationPanel() {
+  const { isBibliotecario } = useAuth();
+  
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center border-b border-slate-200 pb-4">
@@ -18,7 +21,9 @@ export default function ReservationPanel() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockReservations.map(res => (
+        {mockReservations
+          .filter(res => isBibliotecario || res.user === 'Maria da Silva') // Simula o Leitor vendo só as dele
+          .map(res => (
           <div key={res.id} className="glass-card relative overflow-hidden">
             <div className="absolute top-0 right-0 p-4">
               <div className="w-12 h-12 rounded-full border-4 border-sgb-dourado bg-yellow-50 flex items-center justify-center shadow-md">
@@ -37,7 +42,7 @@ export default function ReservationPanel() {
 
             <div className="bg-slate-50 px-6 py-3 border-t border-slate-100 flex justify-between">
               <button className="text-slate-500 hover:text-rose-600 text-sm font-medium transition-colors">Cancelar</button>
-              {res.posicao === 1 && (
+              {isBibliotecario && res.posicao === 1 && (
                 <button className="text-sgb-vinho hover:text-rose-900 text-sm font-bold transition-colors">Atender</button>
               )}
             </div>

@@ -8,6 +8,7 @@ import CatalogList from './pages/catalog/CatalogList'
 import ReservationPanel from './pages/reservations/ReservationPanel'
 import LoanPanel from './pages/loans/LoanPanel'
 import EthicalReports from './pages/reports/EthicalReports'
+import UserList from './pages/users/UserList'
 
 const ProtectedRoute = ({ children, requireBibliotecario }) => {
   const { isAuthenticated, isBibliotecario, loading } = useAuth()
@@ -32,21 +33,28 @@ const ProtectedRoute = ({ children, requireBibliotecario }) => {
 }
 
 function App() {
+  const { isBibliotecario } = useAuth(); // Assuming we export it outside, wait, App is inside AuthProvider so we can use useAuth. No, App is wrapped in main.jsx, so we can use useAuth here!
+
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       
-      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+      {/* Root redirect logic based on Role */}
+      <Route path="/" element={<Navigate to={isBibliotecario ? "/dashboard" : "/catalogo"} replace />} />
       
+      {/* Shared/Leitor Routes */}
       <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/catalogo" element={<CatalogList />} />
         <Route path="/reservas" element={<ReservationPanel />} />
+        <Route path="/emprestimos-leitor" element={<LoanPanel />} />
       </Route>
 
+      {/* Bibliotecario Exclusive Routes */}
       <Route element={<ProtectedRoute requireBibliotecario><Layout /></ProtectedRoute>}>
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/emprestimos" element={<LoanPanel />} />
+        <Route path="/usuarios" element={<UserList />} />
         <Route path="/relatorios" element={<EthicalReports />} />
       </Route>
     </Routes>
