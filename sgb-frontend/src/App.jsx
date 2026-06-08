@@ -26,7 +26,7 @@ const ProtectedRoute = ({ children, requireBibliotecario }) => {
   }
 
   if (requireBibliotecario && !isBibliotecario) {
-    return <Navigate to="/dashboard" replace />
+    return <Navigate to="/catalogo" replace />
   }
 
   return children

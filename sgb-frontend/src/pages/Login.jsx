@@ -14,7 +14,7 @@ export default function Login() {
     e.preventDefault()
     setLoading(true)
     await login(email, senha)
-    navigate('/dashboard')
+    navigate('/')
     setLoading(false)
   }
 

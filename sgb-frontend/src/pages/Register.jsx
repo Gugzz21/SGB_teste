@@ -11,7 +11,7 @@ export default function Register() {
     e.preventDefault()
     if(form.senha !== form.confSenha) return alert("Senhas não conferem!")
     await register(form)
-    navigate('/dashboard')
+    navigate('/')
   }
 
   return (
